@@ -1,4 +1,4 @@
 /java/target/
 /java/.settings/
-/java/resources/application.properties
+/java/src/main/resources/application.properties
 /.vscode/
