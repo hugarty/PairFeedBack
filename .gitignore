@@ -1,0 +1,4 @@
+/java/target/
+/java/.settings/
+/java/resources/application.properties
+/.vscode/
