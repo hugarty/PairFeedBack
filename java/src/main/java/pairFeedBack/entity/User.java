@@ -19,7 +19,7 @@ public class User {
     String senha;
 
     @OneToMany(mappedBy = "user")
-    List<Pair> pair;
+    List<Pair> pairs;
 
 
     public Long getId() {
@@ -52,5 +52,13 @@ public class User {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public List<Pair> getPairs() {
+        return pairs;
+    }
+
+    public void setPairs(List<Pair> pairs) {
+        this.pairs = pairs;
     }
 }

@@ -14,15 +14,9 @@ public class tController {
     @Autowired
     UserRepository userRepository;
 
-    @RequestMapping("/get")
+    @RequestMapping("/")
     @ResponseBody
     public Iterable<User> getAllUsers (){
         return userRepository.findAll();
-    }
-    
-    @RequestMapping("/eae")
-    @ResponseBody
-    public String root(){
-        return "S";
     }
 }
