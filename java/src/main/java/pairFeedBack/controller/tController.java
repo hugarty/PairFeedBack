@@ -1,22 +1,25 @@
 package pairFeedBack.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import pairFeedBack.repository.UserRepository;
-import pairFeedBack.entity.User;
+import pairFeedBack.dto.UserDto;
+import pairFeedBack.service.UserService;
 
 @RestController
 public class tController {
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @RequestMapping("/")
     @ResponseBody
-    public Iterable<User> getAllUsers (){
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers (){
+        return userService.findAll();
     }
+
 }
