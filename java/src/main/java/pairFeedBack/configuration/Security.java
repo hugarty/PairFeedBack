@@ -11,6 +11,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import pairFeedBack.filter.AuthenticationFilter;
+import pairFeedBack.repository.UserRepository;
+import pairFeedBack.service.TokenService;
 
 @Configuration
 @EnableWebSecurity
@@ -18,6 +23,12 @@ public class Security extends WebSecurityConfigurerAdapter {
 
     @Autowired
     UserAuthenticationService userAuthService;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    TokenService tokenService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -29,7 +40,8 @@ public class Security extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
             .antMatchers(HttpMethod.POST, "/login").permitAll()
             .anyRequest().authenticated()
-            .and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            .and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and().addFilterBefore( new AuthenticationFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

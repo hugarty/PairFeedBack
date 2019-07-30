@@ -105,6 +105,14 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-		return true;
-	}
+        return true;
+    }
+
+    public List<Perfil> getPerfis() {
+        return perfis;
+    }
+
+    public void setPerfis(List<Perfil> perfis) {
+        this.perfis = perfis;
+    }
 }
