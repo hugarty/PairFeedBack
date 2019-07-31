@@ -13,7 +13,7 @@ import pairFeedBack.service.UserService;
 
 @RestController
 @RequestMapping("/api")
-public class tController {
+public class MainController {
 
     @Autowired
     UserService userService;
@@ -23,9 +23,4 @@ public class tController {
     public List<UserDto> getAllUsers (){
         return userService.findAll();
     }
-
-    public tController() {
-        System.out.println("\n\n\ntController foi criado!\n\n\n");
-    }
-
 }

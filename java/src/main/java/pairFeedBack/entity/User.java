@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,16 +25,27 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
+
+    @Column(unique = true)
     String email;
     String senha;
 
     @OneToMany(mappedBy = "user")
-    List<Pair> pairs;
+    List<Pair> pairs = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     List<Perfil> perfis = new ArrayList<>();
 
-    public Long getId() {
+    public User(){
+    }
+
+	public User(String name, String email, String senha) {
+        this.name = name;
+        this.email = email;
+        this.senha = senha;
+	}
+
+	public Long getId() {
         return id;
     }
 

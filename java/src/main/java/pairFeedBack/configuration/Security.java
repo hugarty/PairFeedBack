@@ -13,7 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import pairFeedBack.filter.AuthenticationFilter;
+import pairFeedBack.configuration.filter.AuthenticationFilter;
 import pairFeedBack.repository.UserRepository;
 import pairFeedBack.service.TokenService;
 
@@ -38,7 +38,8 @@ public class Security extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers(HttpMethod.POST, "/login").permitAll()
+            .antMatchers(HttpMethod.POST, "/auth").permitAll()
+            .antMatchers(HttpMethod.POST, "/auth/**").permitAll()
             .anyRequest().authenticated()
             .and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and().addFilterBefore( new AuthenticationFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);

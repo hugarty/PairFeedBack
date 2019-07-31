@@ -1,4 +1,4 @@
-package pairFeedBack.filter;
+package pairFeedBack.configuration.filter;
 
 import java.io.IOException;
 import java.util.Optional;

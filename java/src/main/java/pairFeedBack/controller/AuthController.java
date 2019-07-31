@@ -1,5 +1,7 @@
 package pairFeedBack.controller;
 
+import java.net.URI;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +14,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import pairFeedBack.dto.LoginDto;
+import pairFeedBack.dto.LoginForm;
+import pairFeedBack.dto.SignUpForm;
 import pairFeedBack.dto.TokenDto;
+import pairFeedBack.dto.UserDto;
+import pairFeedBack.entity.User;
 import pairFeedBack.service.TokenService;
+import pairFeedBack.service.UserService;
 
 @Controller
-@RequestMapping("/login")
-public class LoginController {
+@RequestMapping("/auth")
+public class AuthController {
 
     @Autowired
     AuthenticationManager authManager;
@@ -27,9 +34,12 @@ public class LoginController {
     @Autowired
     TokenService tokenService;
 
+    @Autowired
+    UserService userService;
+
     @PostMapping
-    public ResponseEntity<?> auth(@RequestBody @Valid LoginDto dto) {
-        UsernamePasswordAuthenticationToken userAuthenticationToken = dto.convert();
+    public ResponseEntity<?> auth(@RequestBody @Valid LoginForm form) {
+        UsernamePasswordAuthenticationToken userAuthenticationToken = form.convert();
         try {
             Authentication auth = authManager.authenticate(userAuthenticationToken);
             String token = tokenService.geraToken(auth);
@@ -38,4 +48,13 @@ public class LoginController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    
+    @PostMapping("/signup")
+    public ResponseEntity<UserDto> signUp (@RequestBody @Valid SignUpForm form) {
+        UserDto userDto = userService.saveNewUser(form);
+        URI uri = UriComponentsBuilder.newInstance().path("/auth").build().toUri();
+        return ResponseEntity.created(uri).body(userDto);
+    }
 }
+
