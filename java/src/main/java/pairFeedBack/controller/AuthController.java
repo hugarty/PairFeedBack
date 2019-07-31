@@ -20,7 +20,6 @@ import pairFeedBack.dto.LoginForm;
 import pairFeedBack.dto.SignUpForm;
 import pairFeedBack.dto.TokenDto;
 import pairFeedBack.dto.UserDto;
-import pairFeedBack.entity.User;
 import pairFeedBack.service.TokenService;
 import pairFeedBack.service.UserService;
 
@@ -53,7 +52,8 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<UserDto> signUp (@RequestBody @Valid SignUpForm form) {
         UserDto userDto = userService.saveNewUser(form);
-        URI uri = UriComponentsBuilder.newInstance().path("/auth").build().toUri();
+        URI uri = UriComponentsBuilder.newInstance()
+                .path("/auth").build().toUri();
         return ResponseEntity.created(uri).body(userDto);
     }
 }

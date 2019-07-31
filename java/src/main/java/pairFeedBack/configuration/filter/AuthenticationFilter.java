@@ -48,7 +48,10 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     private String getToken(HttpServletRequest request) {
         String value = request.getHeader("Authorization");
-        String token = value.substring(7);
+        String token = "";
+        if(value != null)
+            token = value.substring(7);
+        
         return token;
     }
 

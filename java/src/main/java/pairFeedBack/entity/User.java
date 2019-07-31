@@ -127,4 +127,8 @@ public class User implements UserDetails {
     public void setPerfis(List<Perfil> perfis) {
         this.perfis = perfis;
     }
+    
+    public void addPerfil(Perfil perfil) {
+        this.perfis.add(perfil);
+    }
 }

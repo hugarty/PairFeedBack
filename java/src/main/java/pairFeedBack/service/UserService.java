@@ -12,13 +12,18 @@ import org.springframework.stereotype.Service;
 import pairFeedBack.dto.SignUpForm;
 import pairFeedBack.dto.UserDto;
 import pairFeedBack.entity.User;
+import pairFeedBack.repository.PerfilRepository;
 import pairFeedBack.repository.UserRepository;
+import pairFeedBack.utils.PerfilEnum;
 
 @Service
 public class UserService {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    PerfilRepository perfilRepository;
+
 
     public UserDto findUserDto (Long id){
         return null;
@@ -36,7 +41,9 @@ public class UserService {
     @Transactional
 	public UserDto saveNewUser(SignUpForm form) {
         String senha = new BCryptPasswordEncoder().encode(form.getSenha());
-        User user = userRepository.save(new User(form.getName(), form.getEmail(), senha));
+        User user = new User(form.getName(), form.getEmail(), senha);
+        user.addPerfil(perfilRepository.findByPerfilEnum(PerfilEnum.USER));
+        userRepository.save(user);
         UserDto userDto = UserDto.convertToDto(user);
         return userDto;
 	}

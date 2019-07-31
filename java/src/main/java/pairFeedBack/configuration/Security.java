@@ -40,6 +40,8 @@ public class Security extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
             .antMatchers(HttpMethod.POST, "/auth").permitAll()
             .antMatchers(HttpMethod.POST, "/auth/**").permitAll()
+            .antMatchers("/api/users").hasAnyAuthority("ADMIN")
+            .antMatchers("/api/users/**").hasAnyAuthority("ADMIN")
             .anyRequest().authenticated()
             .and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and().addFilterBefore( new AuthenticationFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);

@@ -1,5 +1,6 @@
 package pairFeedBack.dto;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -9,7 +10,7 @@ public class SignUpForm {
 
     @NotNull @NotEmpty @Length(min = 3, max = 100)
     String name;
-    @NotNull @NotEmpty @Length(min = 3, max = 100)
+    @NotNull @Email @Length(min = 3, max = 100)
     String email;
     @NotNull @NotEmpty @Length(min = 6, max = 100)
     String senha;
