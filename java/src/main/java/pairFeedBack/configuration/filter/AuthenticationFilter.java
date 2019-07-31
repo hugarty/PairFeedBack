@@ -24,15 +24,16 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        tryAuthenticateUser(request);
+        tryAuthenticateUserAndSetUserIdInRequest(request);
         filterChain.doFilter(request, response);
     }
 
-    private void tryAuthenticateUser(HttpServletRequest request) {
+    private void tryAuthenticateUserAndSetUserIdInRequest(HttpServletRequest request) {
         String token = getToken(request);
         boolean isTokenValido = tokenService.isTokenValido(token);
         if (isTokenValido) {
             Long userId = tokenService.getIdUsuario(token);
+            request.setAttribute("userId", userId);
             Optional<User> optUser = userRepository.findById(userId);
             authenticateUser(optUser);
         }
