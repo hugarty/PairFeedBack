@@ -1,7 +1,5 @@
 package pairFeedBack.controller;
 
-import java.net.URI;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import pairFeedBack.dto.LoginForm;
-import pairFeedBack.dto.SignUpForm;
 import pairFeedBack.dto.TokenDto;
-import pairFeedBack.dto.UserDto;
 import pairFeedBack.service.TokenService;
 import pairFeedBack.service.UserService;
 
@@ -46,15 +41,6 @@ public class AuthController {
         } catch (AuthenticationException e) {
             return ResponseEntity.badRequest().build();
         }
-    }
-
-    
-    @PostMapping("/signup")
-    public ResponseEntity<UserDto> signUp (@RequestBody @Valid SignUpForm form) {
-        UserDto userDto = userService.saveNewUser(form);
-        URI uri = UriComponentsBuilder.newInstance()
-                .path("/auth").build().toUri();
-        return ResponseEntity.created(uri).body(userDto);
     }
 }
 

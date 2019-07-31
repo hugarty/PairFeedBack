@@ -1,6 +1,7 @@
 package pairFeedBack.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -26,6 +27,9 @@ public class UserService {
 
 
     public UserDto findUserDto (Long id){
+        Optional<User> optUser = userRepository.findById(id);
+        if(optUser.isPresent())
+            return UserDto.convertToDto(optUser.get());
         return null;
     }
 

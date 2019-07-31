@@ -39,9 +39,9 @@ public class Security extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
             .antMatchers(HttpMethod.POST, "/auth").permitAll()
-            .antMatchers(HttpMethod.POST, "/auth/**").permitAll()
-            .antMatchers("/api/users").hasAnyAuthority("ADMIN")
-            .antMatchers("/api/users/**").hasAnyAuthority("ADMIN")
+            .antMatchers(HttpMethod.POST, "/signup").permitAll()
+            .antMatchers(HttpMethod.GET,"/users").hasAuthority("ADMIN")
+            .antMatchers(HttpMethod.GET,"/users/**").hasAuthority("ADMIN")
             .anyRequest().authenticated()
             .and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and().addFilterBefore( new AuthenticationFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
