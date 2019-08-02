@@ -1,4 +1,4 @@
-package pairFeedBack.auth;
+package pairFeedBack.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,6 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -22,7 +24,7 @@ import pairFeedBack.dto.TokenDto;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class AuthTest {
+public class UserTest {
 
     @Value("${api.test.parameters.email.user}")
     String userEmail;
@@ -37,28 +39,23 @@ public class AuthTest {
     private TestRestTemplate restTemplate;
 
     @Test
-    public void greetingShouldReturnDefaultMessage() throws Exception {
-        assertThat(this.restTemplate
-                .getForObject("http://localhost:" + port + "/",String.class)
-            ).contains("rest");
-    }
-
-    @Test
-    public void trySignInShouldNotWork() throws URISyntaxException {
-        String baseUrl = "http://localhost:"+ port +"/auth";
+    public void shouldAccessContentMe() throws URISyntaxException {
+        TokenDto tokenDto = doLoginReturnTokenDto();
+        String baseUrl = "http://localhost:" + port + "/me";
         URI uri = new URI(baseUrl);
-        LoginForm loginForm = new LoginForm();
-        loginForm.setEmail(userEmail);
-        loginForm.setSenha(userPasswd + "abc");
+        HttpHeaders headers = new HttpHeaders();
+        String tipoAndToken = tokenDto.getTipo() + " " + tokenDto.getToken();
 
-        HttpEntity<LoginForm> request = new HttpEntity<>(loginForm);
-        ResponseEntity<String> result = this.restTemplate.postForEntity(uri, request, String.class);
-        assertThat(result.getStatusCodeValue()).isEqualTo(400);
+        headers.add("Authorization", tipoAndToken);
+        HttpEntity<?> requestEntity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> result = this.restTemplate.exchange(uri, HttpMethod.GET, requestEntity, String.class);
+
+        assertThat(result.getStatusCodeValue()).isEqualTo(200);
+        assertThat(result.getBody()).contains("Cleitor");
     }
 
-    @Test
-    public void trySignInShouldWork() throws URISyntaxException {
-        String baseUrl = "http://localhost:"+ port +"/auth";
+    public TokenDto doLoginReturnTokenDto() throws URISyntaxException{
+        String baseUrl = "http://localhost:" + port + "/auth";
         URI uri = new URI(baseUrl);
         LoginForm loginForm = new LoginForm();
         loginForm.setEmail(userEmail);
@@ -66,9 +63,6 @@ public class AuthTest {
 
         HttpEntity<LoginForm> request = new HttpEntity<>(loginForm);
         ResponseEntity<TokenDto> result = this.restTemplate.postForEntity(uri, request, TokenDto.class);
-
-        assertThat(result.getStatusCodeValue()).isEqualTo(200);
-        assertThat(result.getBody().getTipo()).containsIgnoringCase("Bearer");
-        assertThat(result.getBody()).getClass().equals(TokenDto.class);
+        return result.getBody();
     }
 }
