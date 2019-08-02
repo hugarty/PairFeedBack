@@ -3,3 +3,4 @@
 /java/src/main/resources/application.properties
 /java/src/main/resources/data.sql
 /.vscode/
+/java/.attach_pid**
