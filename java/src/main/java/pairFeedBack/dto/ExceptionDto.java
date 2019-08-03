@@ -1,19 +1,34 @@
 package pairFeedBack.dto;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ExceptionDto {
 
-    String title;
-    List<String> details = new ArrayList<>();
+    String message;
+    List<String> details;
 
-    public String getTitle() {
-        return title;
+    public ExceptionDto() {
+        details = new ArrayList<>();
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public ExceptionDto(String message) {
+        this.message = message;
+        details = new ArrayList<>();
+    }
+
+    public ExceptionDto(String message, String... details) {
+        this.message = message;
+        this.details = Arrays.asList(details);
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String title) {
+        this.message = title;
     }
 
     public List<String> getDetails() {

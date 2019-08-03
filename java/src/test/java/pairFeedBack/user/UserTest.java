@@ -54,7 +54,22 @@ public class UserTest {
         assertThat(result.getBody()).contains("Cleitor");
     }
 
-    public TokenDto doLoginReturnTokenDto() throws URISyntaxException{
+    @Test
+    public void shouldNotAccessContentMe() throws URISyntaxException {
+        TokenDto tokenDto = doLoginReturnTokenDto();
+        String baseUrl = "http://localhost:" + port + "/me";
+        URI uri = new URI(baseUrl);
+        HttpHeaders headers = new HttpHeaders();
+        String tipoAndTokenDirty = tokenDto.getTipo() + " ERRO" + tokenDto.getToken();
+
+        headers.add("Authorization", tipoAndTokenDirty);
+        HttpEntity<?> requestEntity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> result = this.restTemplate.exchange(uri, HttpMethod.GET, requestEntity, String.class);
+
+        assertThat(result.getStatusCodeValue()).isEqualTo(403);
+    }
+
+    public TokenDto doLoginReturnTokenDto() throws URISyntaxException {
         String baseUrl = "http://localhost:" + port + "/auth";
         URI uri = new URI(baseUrl);
         LoginForm loginForm = new LoginForm();
