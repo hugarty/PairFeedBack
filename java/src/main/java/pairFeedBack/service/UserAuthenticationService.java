@@ -1,4 +1,4 @@
-package pairFeedBack.configuration;
+package pairFeedBack.service;
 
 import java.util.Optional;
 

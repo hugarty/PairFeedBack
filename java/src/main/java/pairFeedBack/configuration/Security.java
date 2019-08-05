@@ -16,6 +16,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import pairFeedBack.configuration.filter.AuthenticationFilter;
 import pairFeedBack.repository.UserRepository;
 import pairFeedBack.service.TokenService;
+import pairFeedBack.service.UserAuthenticationService;
+
 
 @Configuration
 @EnableWebSecurity
