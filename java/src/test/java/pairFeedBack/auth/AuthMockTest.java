@@ -38,7 +38,7 @@ public class AuthMockTest {
 
     @Test
     public void shouldReturnDefaultMessage() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/").accept(MediaType.APPLICATION_JSON)).andDo(print())
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/me/api/test").accept(MediaType.APPLICATION_JSON)).andDo(print())
                 .andExpect(status().isOk()).andExpect(content().string(containsString("rest")));
     }
 

@@ -39,7 +39,7 @@ public class AuthTest {
     @Test
     public void greetingShouldReturnDefaultMessage() throws Exception {
         assertThat(this.restTemplate
-                .getForObject("http://localhost:" + port + "/",String.class)
+                .getForObject("http://localhost:" + port + "/me/api/test",String.class)
             ).contains("rest");
     }
 
