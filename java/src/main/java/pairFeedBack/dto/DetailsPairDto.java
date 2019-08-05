@@ -9,17 +9,19 @@ import pairFeedBack.entity.Pair;
 public class DetailsPairDto {
 
     Long id;
+    Long userId;
     String name;
     Float average;
     List<FeedBackDto> feedBackDtoList;
 
-    public DetailsPairDto(Long id, String name, Float average, List<FeedBack> feedbackList) {
+    public DetailsPairDto(Long id, Long userId, String name, Float average, List<FeedBack> feedbackList) {
         this.id = id;
+        this.userId = userId;
         this.name = name;
         this.average = average;
         this.feedBackDtoList = feedbackList.stream()
-            .map(FeedBackDto::convertToDto)
-            .collect(Collectors.toList());
+        .map(FeedBackDto::convertToDto)
+        .collect(Collectors.toList());
     }
 
     public Long getId() {
@@ -54,9 +56,17 @@ public class DetailsPairDto {
         this.feedBackDtoList = feedBackDtoList;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     public static DetailsPairDto convertToDto(Pair pair) {
-        DetailsPairDto dto = new DetailsPairDto(pair.getId(), pair.getName(), pair.getAverage(),
-                pair.getFeedbackList());
+        DetailsPairDto dto = new DetailsPairDto(pair.getId(), pair.getUser().getId(), 
+            pair.getName(), pair.getAverage(), pair.getFeedbackList());
         return dto;
     }
 }

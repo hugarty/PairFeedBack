@@ -43,11 +43,13 @@ public class MainController {
     }
 
     @GetMapping("/pair/{id}")
-    public DetailsPairDto getPair(@PathVariable Long id){
+    public DetailsPairDto getPair(@PathVariable Long id, HttpServletRequest request){
+        Long userId = (Long) request.getAttribute("userId");
         Optional<Pair> optPair = pairRepository.findById(id);
         if(optPair.isPresent()){
             DetailsPairDto pairDto = DetailsPairDto.convertToDto(optPair.get());
-            return pairDto;
+            if(pairDto.getUserId() == userId)
+                return pairDto;
         }
         return null;
     }
