@@ -1,6 +1,6 @@
 /java/target/
 /java/.settings/
-/java/src/main/resources/application.properties
+/java/src/main/resources/security.properties
 /java/src/main/resources/data.sql
 /.vscode/
 .attach_pid*

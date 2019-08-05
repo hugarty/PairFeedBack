@@ -1,0 +1,11 @@
+#False file, only present to represent the real
+
+spring.datasource.username=UserOfSpring
+spring.datasource.password=jsie32o9d9
+
+#token 
+api.jwt.token.senha.aleatoria=N34iLOidn2krf%eD3dg$3223XK7u8}<?Mg[sQj(=QvvaT4fkNC*$WffMU!r4?F2HNkD$>g8RSk6aWFcE
+api.jwt.token.nome.api=PairFeedBackApi
+
+#TestParameters
+api.test.parameters.passwd.user=userPasswd
