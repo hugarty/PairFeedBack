@@ -52,6 +52,8 @@ public class UserTest {
 
         assertThat(result.getStatusCodeValue()).isEqualTo(200);
         assertThat(result.getBody()).contains("Cleitor");
+        assertThat(result.getBody()).contains("Par");
+        assertThat(result.getBody()).contains("Par3");
     }
 
     @Test
