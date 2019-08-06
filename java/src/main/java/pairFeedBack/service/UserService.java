@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import pairFeedBack.dto.SignUpForm;
-import pairFeedBack.dto.UserDto;
+import pairFeedBack.dataTransferer.dto.UserDto;
+import pairFeedBack.dataTransferer.form.SignUpForm;
 import pairFeedBack.entity.User;
 import pairFeedBack.repository.PerfilRepository;
 import pairFeedBack.repository.UserRepository;

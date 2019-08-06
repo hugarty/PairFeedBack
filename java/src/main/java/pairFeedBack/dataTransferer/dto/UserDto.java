@@ -1,10 +1,10 @@
-package pairFeedBack.dto;
+package pairFeedBack.dataTransferer.dto;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import pairFeedBack.entity.User;
-import pairFeedBack.dto.PairDto;
+import pairFeedBack.dataTransferer.dto.PairDto;
 
 public class UserDto {
     Long id;

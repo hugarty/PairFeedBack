@@ -1,26 +1,22 @@
-package pairFeedBack.dto;
+package pairFeedBack.dataTransferer.form;
 
-import javax.validation.constraints.Email;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-public class SignUpForm {
+public class LoginForm {
 
     @NotNull @NotEmpty @Length(min = 3, max = 100)
-    String name;
-    @NotNull @Email @Length(min = 3, max = 100)
     String email;
+    
     @NotNull @NotEmpty @Length(min = 6, max = 100)
     String senha;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        
+    public UsernamePasswordAuthenticationToken convert(){
+       return new UsernamePasswordAuthenticationToken(email, senha);
     }
 
     public String getEmail() {

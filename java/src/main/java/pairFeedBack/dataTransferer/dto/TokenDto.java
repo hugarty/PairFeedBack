@@ -1,4 +1,4 @@
-package pairFeedBack.dto;
+package pairFeedBack.dataTransferer.dto;
 
 public class TokenDto {
 

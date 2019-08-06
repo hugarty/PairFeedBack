@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import pairFeedBack.dto.DetailsPairDto;
-import pairFeedBack.dto.UserDto;
+import pairFeedBack.dataTransferer.dto.DetailsPairDto;
+import pairFeedBack.dataTransferer.dto.UserDto;
 import pairFeedBack.entity.Pair;
 import pairFeedBack.entity.User;
 import pairFeedBack.repository.PairRepository;

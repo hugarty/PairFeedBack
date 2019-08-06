@@ -19,8 +19,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import pairFeedBack.dto.LoginForm;
-import pairFeedBack.dto.TokenDto;
+import pairFeedBack.dataTransferer.dto.TokenDto;
+import pairFeedBack.dataTransferer.form.LoginForm;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)

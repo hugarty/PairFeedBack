@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import pairFeedBack.dto.LoginForm;
-import pairFeedBack.dto.TokenDto;
+import pairFeedBack.dataTransferer.dto.TokenDto;
+import pairFeedBack.dataTransferer.form.LoginForm;
 import pairFeedBack.service.TokenService;
 import pairFeedBack.service.UserService;
 

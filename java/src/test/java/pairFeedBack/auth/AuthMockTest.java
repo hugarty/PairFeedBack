@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import pairFeedBack.dto.LoginForm;
+import pairFeedBack.dataTransferer.form.LoginForm;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

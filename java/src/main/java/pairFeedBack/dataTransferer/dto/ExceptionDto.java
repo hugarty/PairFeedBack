@@ -1,4 +1,4 @@
-package pairFeedBack.dto;
+package pairFeedBack.dataTransferer.dto;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import pairFeedBack.dto.SignUpForm;
-import pairFeedBack.dto.UserDto;
+import pairFeedBack.dataTransferer.dto.UserDto;
+import pairFeedBack.dataTransferer.form.SignUpForm;
 import pairFeedBack.service.UserService;
 
 @RestController

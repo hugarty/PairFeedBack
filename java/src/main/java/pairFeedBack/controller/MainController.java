@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import pairFeedBack.dto.DetailsPairDto;
-import pairFeedBack.dto.UserDto;
+import pairFeedBack.dataTransferer.dto.DetailsPairDto;
+import pairFeedBack.dataTransferer.dto.UserDto;
 import pairFeedBack.service.MainService;
 
 @RestController
