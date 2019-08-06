@@ -58,7 +58,7 @@ public class AuthTest {
 
     @Test
     public void trySignInShouldWork() throws URISyntaxException {
-        URI uri = Utils.getUriForPath("/path", port);
+        URI uri = Utils.getUriForPath("/auth", port);
         LoginForm loginForm = new LoginForm();
         loginForm.setEmail(userEmail);
         loginForm.setSenha(userPasswd);

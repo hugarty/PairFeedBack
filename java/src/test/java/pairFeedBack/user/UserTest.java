@@ -14,13 +14,12 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import pairFeedBack.dataTransferer.dto.TokenDto;
-import pairFeedBack.dataTransferer.form.LoginForm;
+import pairFeedBack.dataTransferer.dto.UserDto;
+import pairFeedBack.dataTransferer.form.SignUpForm;
+import pairFeedBack.utils.Utils;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -34,52 +33,24 @@ public class UserTest {
 
     @LocalServerPort
     private int port;
-
+    
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @Test
-    public void shouldAccessContentMe() throws URISyntaxException {
-        TokenDto tokenDto = doLoginReturnTokenDto();
-        String baseUrl = "http://localhost:" + port + "/me";
-        URI uri = new URI(baseUrl);
-        HttpHeaders headers = new HttpHeaders();
-        String tipoAndToken = tokenDto.getTipo() + " " + tokenDto.getToken();
 
-        headers.add("Authorization", tipoAndToken);
-        HttpEntity<?> requestEntity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> result = this.restTemplate.exchange(uri, HttpMethod.GET, requestEntity, String.class);
+    @Test 
+    public void shouldSignUp () throws URISyntaxException{
+        URI uri = Utils.getUriForPath("/signup", port);
+        
+        SignUpForm signUpForm = new SignUpForm();
+        signUpForm.setEmail("jose@jose.com");
+        signUpForm.setName("ArrobaRotemaio");
+        signUpForm.setSenha("senhateste");
 
-        assertThat(result.getStatusCodeValue()).isEqualTo(200);
-        assertThat(result.getBody()).contains("Cleitor");
-        assertThat(result.getBody()).contains("Par");
-        assertThat(result.getBody()).contains("Par3");
-    }
-
-    @Test
-    public void shouldNotAccessContentMe() throws URISyntaxException {
-        TokenDto tokenDto = doLoginReturnTokenDto();
-        String baseUrl = "http://localhost:" + port + "/me";
-        URI uri = new URI(baseUrl);
-        HttpHeaders headers = new HttpHeaders();
-        String tipoAndTokenDirty = tokenDto.getTipo() + " ERRO" + tokenDto.getToken();
-
-        headers.add("Authorization", tipoAndTokenDirty);
-        HttpEntity<?> requestEntity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> result = this.restTemplate.exchange(uri, HttpMethod.GET, requestEntity, String.class);
-
-        assertThat(result.getStatusCodeValue()).isEqualTo(403);
-    }
-
-    public TokenDto doLoginReturnTokenDto() throws URISyntaxException {
-        String baseUrl = "http://localhost:" + port + "/auth";
-        URI uri = new URI(baseUrl);
-        LoginForm loginForm = new LoginForm();
-        loginForm.setEmail(userEmail);
-        loginForm.setSenha(userPasswd);
-
-        HttpEntity<LoginForm> request = new HttpEntity<>(loginForm);
-        ResponseEntity<TokenDto> result = this.restTemplate.postForEntity(uri, request, TokenDto.class);
-        return result.getBody();
+        HttpEntity<SignUpForm> requestEntity = new HttpEntity<>(signUpForm);
+        ResponseEntity<UserDto> result = this.restTemplate.postForEntity(uri, requestEntity, UserDto.class);
+        
+        assertThat(result.getStatusCodeValue()).isEqualTo(201);
+        assertThat(result.getBody().getName().equals(signUpForm.getName()));
     }
 }

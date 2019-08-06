@@ -86,7 +86,6 @@ public class MainTest {
         return headers;
     }
 
-
     private TokenDto doLoginReturnTokenDto() throws URISyntaxException {
         URI uri = Utils.getUriForPath("/auth", port);
         LoginForm loginForm = new LoginForm();
