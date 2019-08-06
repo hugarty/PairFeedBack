@@ -41,7 +41,7 @@ public class FeedBackDto {
     }
 
     public static FeedBackDto convertToDto(FeedBack f){
-        FeedBackDto feedDto = new FeedBackDto(f.getId(), f.getNota(), f.getDate());
+        FeedBackDto feedDto = new FeedBackDto(f.getId(), f.getRating(), f.getDate());
         return feedDto;
     }
 }

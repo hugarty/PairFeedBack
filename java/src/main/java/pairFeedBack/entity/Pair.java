@@ -1,5 +1,6 @@
 package pairFeedBack.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -24,7 +25,7 @@ public class Pair {
     Float average;
 
     @ManyToMany(mappedBy = "pairList")
-    List<FeedBack> feedbackList;
+    List<FeedBack> feedbackList = new ArrayList<>();
 
     public Long getId() {
         return id;

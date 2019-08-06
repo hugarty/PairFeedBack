@@ -1,6 +1,7 @@
 package pairFeedBack.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -16,13 +17,21 @@ public class FeedBack {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    Integer nota;
+    Integer rating;
 
     @Column(name = "date", columnDefinition = "DATE")
     LocalDate date;
 
     @ManyToMany
-    List<Pair> pairList;
+    List<Pair> pairList = new ArrayList<>();
+
+    public FeedBack (){
+    }
+
+    public FeedBack (Integer rating, LocalDate today){
+        this.rating = rating;
+        this.date = today;
+    }
 
     public Long getId() {
         return id;
@@ -32,12 +41,12 @@ public class FeedBack {
         this.id = id;
     }
 
-    public Integer getNota() {
-        return nota;
+    public Integer getRating() {
+        return rating;
     }
 
-    public void setNota(Integer nota) {
-        this.nota = nota;
+    public void setRating(Integer rating) {
+        this.rating = rating;
     }
 
     public List<Pair> getPairList() {
@@ -46,6 +55,10 @@ public class FeedBack {
 
     public void setPairList(List<Pair> pairList) {
         this.pairList = pairList;
+    }
+
+    public void  addPairToPairList (Pair pair){
+        this.pairList.add(pair);
     }
 
     public LocalDate getDate() {
