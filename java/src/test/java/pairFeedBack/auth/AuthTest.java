@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import pairFeedBack.dataTransferer.dto.TokenDto;
 import pairFeedBack.dataTransferer.form.LoginForm;
+import pairFeedBack.utils.Utils;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -45,8 +46,7 @@ public class AuthTest {
 
     @Test
     public void trySignInShouldNotWork() throws URISyntaxException {
-        String baseUrl = "http://localhost:"+ port +"/auth";
-        URI uri = new URI(baseUrl);
+        URI uri = Utils.getUriForPath("/auth", port);
         LoginForm loginForm = new LoginForm();
         loginForm.setEmail(userEmail);
         loginForm.setSenha(userPasswd + "abc");
@@ -58,8 +58,7 @@ public class AuthTest {
 
     @Test
     public void trySignInShouldWork() throws URISyntaxException {
-        String baseUrl = "http://localhost:"+ port +"/auth";
-        URI uri = new URI(baseUrl);
+        URI uri = Utils.getUriForPath("/path", port);
         LoginForm loginForm = new LoginForm();
         loginForm.setEmail(userEmail);
         loginForm.setSenha(userPasswd);
