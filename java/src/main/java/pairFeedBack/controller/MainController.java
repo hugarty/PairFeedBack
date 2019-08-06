@@ -1,7 +1,5 @@
 package pairFeedBack.controller;
 
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,20 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import pairFeedBack.dto.DetailsPairDto;
 import pairFeedBack.dto.UserDto;
-import pairFeedBack.entity.Pair;
-import pairFeedBack.entity.User;
-import pairFeedBack.repository.PairRepository;
-import pairFeedBack.repository.UserRepository;
+import pairFeedBack.service.MainService;
 
 @RestController
 @RequestMapping("/me")
 public class MainController {
 
     @Autowired
-    UserRepository UserRepository;
-    
-    @Autowired
-    PairRepository pairRepository;
+    MainService mainService;
 
     @GetMapping("/api/test")
     public ResponseEntity<String> nothing() {
@@ -34,23 +26,16 @@ public class MainController {
     }
 
     @GetMapping
-    public UserDto mainPage(HttpServletRequest request) {
-        Long userId = (Long) request.getAttribute("userId");
-        Optional<User> optUser = UserRepository.findById(userId);
-        if (optUser.isPresent())
-            return UserDto.convertToDto(optUser.get());
-        return null;
+    public UserDto usersWithPairs(HttpServletRequest request) {
+        return mainService.getUserDtoById(getUserId(request));
     }
 
     @GetMapping("/pair/{id}")
     public DetailsPairDto getPair(@PathVariable Long id, HttpServletRequest request){
-        Long userId = (Long) request.getAttribute("userId");
-        Optional<Pair> optPair = pairRepository.findById(id);
-        if(optPair.isPresent()){
-            DetailsPairDto pairDto = DetailsPairDto.convertToDto(optPair.get());
-            if(pairDto.getUserId() == userId)
-                return pairDto;
-        }
-        return null;
+        return mainService.getDetailsPairDtoById(id, getUserId(request));
+    }    
+
+    private Long getUserId(HttpServletRequest request){
+        return (Long) request.getAttribute("userId");
     }
 }
