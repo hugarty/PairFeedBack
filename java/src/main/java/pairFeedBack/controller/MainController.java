@@ -32,21 +32,17 @@ public class MainController {
 
     @GetMapping
     public UserDto usersWithPairs(HttpServletRequest request) {
-        return mainService.getUserDtoById(getUserId(request));
+        return mainService.getUserDtoById(request);
     }
 
     @GetMapping("/pair/{id}")
     public DetailsPairDto getPair(@PathVariable Long id, HttpServletRequest request){
-        return mainService.getDetailsPairDtoById(id, getUserId(request));
+        return mainService.getDetailsPairDtoById(id, request);
     }    
 
     @PostMapping("/pair")
     @Transactional
     public DetailsPairDto addFeedBackToPair(@RequestBody @Valid PairRatingForm form, HttpServletRequest request){
-        return mainService.addFeedBackToPair(form, getUserId(request));
-    }
-
-    private Long getUserId(HttpServletRequest request){
-        return (Long) request.getAttribute("userId");
+        return mainService.addFeedBackToPair(form, request);
     }
 }

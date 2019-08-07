@@ -3,7 +3,11 @@ package pairFeedBack.service;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.stereotype.Service;
 
 import pairFeedBack.dataTransferer.dto.DetailsPairDto;
@@ -28,44 +32,55 @@ public class MainService {
     @Autowired
     FeedBackRepository feedbackRepository;
 
-    public UserDto getUserDtoById(Long userId){
-        Optional<User> optUser = userRepository.findById(userId);
+    public UserDto getUserDtoById(HttpServletRequest request){
+        Optional<User> optUser = userRepository.findById(getUserId(request));
         if (optUser.isPresent())
             return UserDto.convertToDto(optUser.get());
         return null;
     }
 
-    public DetailsPairDto getDetailsPairDtoById (Long idPar, Long userId){
-        Optional<Pair> optPair = pairRepository.findById(idPar);
-        if(optPair.isPresent()){
-            DetailsPairDto pairDto = DetailsPairDto.convertToDto(optPair.get());
-            if(pairDto.getUserId() == userId)
-                return pairDto;
-        }
-        return null;
+    public DetailsPairDto getDetailsPairDtoById (Long pairId, HttpServletRequest request){
+        Pair pair = secureFindPairById(pairId, request);
+        DetailsPairDto pairDto = DetailsPairDto.convertToDto(pair);
+        return pairDto;
     }
 
-	public DetailsPairDto addFeedBackToPair(PairRatingForm form, Long userId) {
-        Optional<Pair> optPair = pairRepository.findById(form.getPairId());
-        if(optPair.isPresent() && optPair.get().getUser().getId().equals(userId))
-        {
-            LocalDate today = LocalDate.now();
-            Optional<FeedBack> optFeedback = optPair.get().getFeedbackList()
-                .stream()
-                .filter(feedback -> feedback.getDate().isEqual(today))
-                .findFirst();
+	public DetailsPairDto addFeedBackToPair(PairRatingForm form, HttpServletRequest request) {
+        Pair pair = secureFindPairById(form.getPairId(), request);
+        
+        LocalDate today = LocalDate.now();
+        Optional<FeedBack> optFeedback = pair.getFeedbackList()
+            .stream()
+            .filter(feedback -> feedback.getDate().isEqual(today))
+            .findFirst();
 
-            if(optFeedback.isPresent()){
-                optFeedback.get().setRating(form.getRating());
-                feedbackRepository.save(optFeedback.get());
-            }
-            else{
-                FeedBack feedBack = new FeedBack(form.getRating(), today);
-                feedBack.addPairToPairList(optPair.get());
-                optPair.get().getFeedbackList().add(feedBack);
-                feedbackRepository.save(feedBack);
-            }
+        if(optFeedback.isPresent()){
+            optFeedback.get().setRating(form.getRating());
+            feedbackRepository.save(optFeedback.get());
         }
-		return null;
-	}
+        else{
+            FeedBack feedBack = new FeedBack(form.getRating(), today);
+            feedBack.addPairToPairList(pair);
+            pair.getFeedbackList().add(feedBack);
+            feedbackRepository.save(feedBack);
+        }
+
+        DetailsPairDto detailsPairDto = DetailsPairDto.convertToDto(pair);
+		return detailsPairDto;
+    }
+    
+    private Long getUserId(HttpServletRequest request){
+        return (Long) request.getAttribute("userId");
+    }
+
+    private Pair secureFindPairById(Long pairId, HttpServletRequest request){
+        Optional<Pair> optPair = pairRepository.findById(pairId);
+        if(optPair.isPresent() ){
+            if(optPair.get().getUser().getId().equals(getUserId(request))){
+                return optPair.get();
+            }
+            throw new PermissionDeniedDataAccessException("Acesso negado!", new Throwable("Tentou recuperar pair que não é seu."));
+        }
+        throw new EmptyResultDataAccessException("Pair não encontrado", 1);
+    }
 }
