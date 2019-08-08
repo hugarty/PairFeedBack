@@ -1,5 +1,7 @@
 package pairFeedBack.controller;
 
+import java.net.URI;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import pairFeedBack.dataTransferer.dto.DetailsPairDto;
 import pairFeedBack.dataTransferer.dto.UserDto;
@@ -42,7 +45,9 @@ public class MainController {
 
     @PostMapping("/pair")
     @Transactional
-    public DetailsPairDto addFeedBackToPair(@RequestBody @Valid PairRatingForm form, HttpServletRequest request){
-        return mainService.addFeedBackToPair(form, request);
+    public ResponseEntity<DetailsPairDto> addFeedBackToPair(@RequestBody @Valid PairRatingForm form, HttpServletRequest request){
+        DetailsPairDto dto = mainService.addFeedBackToPair(form, request);
+        URI uri = UriComponentsBuilder.newInstance().path("/me/pair/{id}").buildAndExpand(dto.getId()).toUri();
+        return ResponseEntity.created(uri).body(dto);
     }
 }

@@ -16,9 +16,12 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import pairFeedBack.dataTransferer.dto.DetailsPairDto;
+import pairFeedBack.dataTransferer.dto.ExceptionDto;
 import pairFeedBack.dataTransferer.dto.TokenDto;
 import pairFeedBack.dataTransferer.form.LoginForm;
 import pairFeedBack.dataTransferer.form.PairRatingForm;
@@ -65,19 +68,44 @@ public class MainTest {
         assertThat(result.getStatusCodeValue()).isEqualTo(403);
     }
 
+
     @Test
-    public void shouldPostNewFeedBackInPair() throws URISyntaxException {
+    public void doPostFeedbackInPairTests () throws URISyntaxException {
         URI uri = Utils.getUriForPath("/me/pair", port);
         HttpHeaders header = doLoginAndReturnAuthorizationHeader();
+        shouldPostNewFeedBackInPair(uri, header);
+        shouldNotPostNewFeedBackInPair(uri, header);
+        shouldEditPostFeedBackInPair(uri, header);
+    }
 
+    public void shouldPostNewFeedBackInPair(URI uri, HttpHeaders header) throws URISyntaxException {
         PairRatingForm form = new PairRatingForm();
         form.setPairId(1L);
         form.setRating(6);
-
         HttpEntity<PairRatingForm> requestEntity = new HttpEntity<>(form, header);
-        ResponseEntity<String> result = this.restTemplate.postForEntity(uri, requestEntity, String.class);
+        ResponseEntity<DetailsPairDto> result = this.restTemplate.postForEntity(uri, requestEntity, DetailsPairDto.class);
+        assertThat(result.getStatusCodeValue()).isEqualTo(201);
+    }
 
-        assertThat(result.getStatusCodeValue()).isEqualTo(200);
+    public void shouldNotPostNewFeedBackInPair(URI uri, HttpHeaders header)  throws URISyntaxException {
+        PairRatingForm form = new PairRatingForm();
+        form.setPairId(5L);
+        form.setRating(2);
+        HttpEntity<PairRatingForm> requestEntity = new HttpEntity<>(form, header);
+        ResponseEntity<ExceptionDto> result = this.restTemplate.postForEntity(uri, requestEntity, ExceptionDto.class);
+        assertThat(result.getStatusCodeValue()).isEqualTo(403);
+        assertThat(result.getBody().getMessage()).containsIgnoringCase("acesso negado");
+    }
+
+    public void shouldEditPostFeedBackInPair(URI uri, HttpHeaders header)  throws URISyntaxException {
+        PairRatingForm form = new PairRatingForm();
+        form.setPairId(1L);
+        form.setRating(4);
+        HttpEntity<PairRatingForm> requestEntity = new HttpEntity<>(form, header);
+        ResponseEntity<DetailsPairDto> result = this.restTemplate.postForEntity(uri, requestEntity, DetailsPairDto.class);
+        assertThat(result.getStatusCodeValue()).isEqualTo(201);
+        assertThat(result.getBody().getFeedBackDtoList().get(1).getNota()).isEqualTo(4);
+        assertThat(result.getBody().getFeedBackDtoList().size()).isEqualTo(2);
     }
 
     private HttpHeaders doLoginAndReturnAuthorizationHeader() throws URISyntaxException {

@@ -14,6 +14,9 @@ public class DetailsPairDto {
     Float average;
     List<FeedBackDto> feedBackDtoList;
 
+    public DetailsPairDto (){
+    }
+
     public DetailsPairDto(Long id, Long userId, String name, Float average, List<FeedBack> feedbackList) {
         this.id = id;
         this.userId = userId;

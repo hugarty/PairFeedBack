@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.stereotype.Service;
 
 import pairFeedBack.dataTransferer.dto.DetailsPairDto;
@@ -16,6 +15,7 @@ import pairFeedBack.dataTransferer.form.PairRatingForm;
 import pairFeedBack.entity.FeedBack;
 import pairFeedBack.entity.Pair;
 import pairFeedBack.entity.User;
+import pairFeedBack.exception.DeniedDataAccessException;
 import pairFeedBack.repository.FeedBackRepository;
 import pairFeedBack.repository.PairRepository;
 import pairFeedBack.repository.UserRepository;
@@ -79,7 +79,7 @@ public class MainService {
             if(optPair.get().getUser().getId().equals(getUserId(request))){
                 return optPair.get();
             }
-            throw new PermissionDeniedDataAccessException("Acesso negado!", new Throwable("Tentou recuperar pair que não é seu."));
+            throw new DeniedDataAccessException("Acesso negado!");
         }
         throw new EmptyResultDataAccessException("Pair não encontrado", 1);
     }
