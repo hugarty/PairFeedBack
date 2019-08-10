@@ -17,8 +17,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.RestTemplate;
 
+import net.bytebuddy.agent.VirtualMachine.ForHotSpot.Connection.Response;
 import pairFeedBack.dataTransferer.dto.DetailsPairDto;
 import pairFeedBack.dataTransferer.dto.ExceptionDto;
 import pairFeedBack.dataTransferer.dto.TokenDto;
@@ -82,29 +85,28 @@ public class MainTest {
         form.setPairId(1L);
         form.setRating(6);
         HttpEntity<PairRatingForm> requestEntity = new HttpEntity<>(form, header);
-        ResponseEntity<DetailsPairDto> result = this.restTemplate.postForEntity(uri, requestEntity, DetailsPairDto.class);
+        ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.PATCH, requestEntity, DetailsPairDto.class);
         assertThat(result.getStatusCodeValue()).isEqualTo(201);
+        assertThat(result.getBody().getFeedBackDtoList().size()).isEqualTo(2);
     }
 
-    public void shouldNotPostNewFeedBackInPair(URI uri, HttpHeaders header)  throws URISyntaxException {
+    public void shouldNotPostNewFeedBackInPair(URI uri, HttpHeaders header) throws URISyntaxException {
         PairRatingForm form = new PairRatingForm();
         form.setPairId(5L);
         form.setRating(2);
         HttpEntity<PairRatingForm> requestEntity = new HttpEntity<>(form, header);
-        ResponseEntity<ExceptionDto> result = this.restTemplate.postForEntity(uri, requestEntity, ExceptionDto.class);
+        ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.PATCH, requestEntity, DetailsPairDto.class);
         assertThat(result.getStatusCodeValue()).isEqualTo(403);
-        assertThat(result.getBody().getMessage()).containsIgnoringCase("acesso negado");
     }
 
-    public void shouldEditPostFeedBackInPair(URI uri, HttpHeaders header)  throws URISyntaxException {
+    public void shouldEditPostFeedBackInPair(URI uri, HttpHeaders header) throws URISyntaxException {
         PairRatingForm form = new PairRatingForm();
         form.setPairId(1L);
         form.setRating(4);
         HttpEntity<PairRatingForm> requestEntity = new HttpEntity<>(form, header);
-        ResponseEntity<DetailsPairDto> result = this.restTemplate.postForEntity(uri, requestEntity, DetailsPairDto.class);
+        ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.PATCH, requestEntity, DetailsPairDto.class);
         assertThat(result.getStatusCodeValue()).isEqualTo(201);
         assertThat(result.getBody().getFeedBackDtoList().get(1).getNota()).isEqualTo(4);
-        assertThat(result.getBody().getFeedBackDtoList().size()).isEqualTo(2);
     }
 
     private HttpHeaders doLoginAndReturnAuthorizationHeader() throws URISyntaxException {
