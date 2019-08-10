@@ -14,6 +14,7 @@ import pairFeedBack.dataTransferer.dto.DetailsPairDto;
 import pairFeedBack.dataTransferer.dto.UserDto;
 import pairFeedBack.dataTransferer.form.PairAddForm;
 import pairFeedBack.dataTransferer.form.PairRatingForm;
+import pairFeedBack.dataTransferer.form.PairUpdateForm;
 import pairFeedBack.entity.FeedBack;
 import pairFeedBack.entity.Pair;
 import pairFeedBack.entity.User;
@@ -52,22 +53,22 @@ public class MainService {
         Pair pair = new Pair(form.getName(), user, (float)form.getRating());
         LocalDate today = LocalDate.now();
         FeedBack feedback = new FeedBack(form.getRating(), today);
+
         feedback.addPairToPairList(pair);
-        feedbackRepository.save(feedback);
         pair.getFeedbackList().add(feedback);
+        
+        feedbackRepository.save(feedback);
         pairRepository.save(pair);
         return DetailsPairDto.convertToDto(pair);
 	}
-
+    
 	public DetailsPairDto addFeedBackToPair(PairRatingForm form, HttpServletRequest request) {
         Pair pair = secureFindPairById(form.getPairId(), request);
-        
         LocalDate today = LocalDate.now();
-        Optional<FeedBack> optFeedback = pair.getFeedbackList()
-            .stream()
-            .filter(feedback -> feedback.getDate().isEqual(today))
-            .findFirst();
-
+        Optional<FeedBack> optFeedback = pair.getFeedbackList().stream()
+        .filter(feedback -> feedback.getDate().isEqual(today))
+        .findFirst();
+        
         if(optFeedback.isPresent()){
             optFeedback.get().setRating(form.getRating());
             feedbackRepository.save(optFeedback.get());
@@ -78,9 +79,21 @@ public class MainService {
             pair.getFeedbackList().add(feedBack);
             feedbackRepository.save(feedBack);
         }
-
+        
         DetailsPairDto detailsPairDto = DetailsPairDto.convertToDto(pair);
 		return detailsPairDto;
+    }
+    
+    public DetailsPairDto updatePair(@Valid PairUpdateForm form, HttpServletRequest request) {
+        Pair pair = secureFindPairById(form.getPairId(), request);
+        pair.setName(form.getName());
+        pairRepository.save(pair);
+        return DetailsPairDto.convertToDto(pair);
+    }
+    
+    public void deletePair(Long pairId, HttpServletRequest request) {
+        Pair pair = secureFindPairById(pairId, request);
+        pairRepository.delete(pair);
     }
     
     private Long getUserId(HttpServletRequest request){
