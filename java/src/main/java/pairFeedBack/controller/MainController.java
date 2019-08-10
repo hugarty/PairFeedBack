@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import pairFeedBack.dataTransferer.dto.DetailsPairDto;
 import pairFeedBack.dataTransferer.dto.UserDto;
+import pairFeedBack.dataTransferer.form.PairAddForm;
 import pairFeedBack.dataTransferer.form.PairRatingForm;
 import pairFeedBack.service.MainService;
 
@@ -47,6 +48,14 @@ public class MainController {
     @Transactional
     public ResponseEntity<DetailsPairDto> addFeedBackToPair(@RequestBody @Valid PairRatingForm form, HttpServletRequest request){
         DetailsPairDto dto = mainService.addFeedBackToPair(form, request);
+        URI uri = UriComponentsBuilder.newInstance().path("/me/pair/{id}").buildAndExpand(dto.getId()).toUri();
+        return ResponseEntity.created(uri).body(dto);
+    }
+    
+    @PostMapping("/pair/add")
+    @Transactional
+    public ResponseEntity<DetailsPairDto> addPair(@RequestBody @Valid PairAddForm form, HttpServletRequest request){
+        DetailsPairDto dto = mainService.addPair(form, request);
         URI uri = UriComponentsBuilder.newInstance().path("/me/pair/{id}").buildAndExpand(dto.getId()).toUri();
         return ResponseEntity.created(uri).body(dto);
     }

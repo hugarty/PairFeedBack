@@ -66,4 +66,13 @@ public class Pair {
     public void setFeedbackList(List<FeedBack> feedbackList) {
         this.feedbackList = feedbackList;
     }
+
+    public Pair(String name, User user, Float average) {
+        this.name = name;
+        this.user = user;
+        this.average = average;
+    }
+
+    public Pair() {
+    }
 }

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import pairFeedBack.dataTransferer.dto.DetailsPairDto;
 import pairFeedBack.dataTransferer.dto.UserDto;
+import pairFeedBack.dataTransferer.form.PairAddForm;
 import pairFeedBack.dataTransferer.form.PairRatingForm;
 import pairFeedBack.entity.FeedBack;
 import pairFeedBack.entity.Pair;
@@ -44,6 +46,18 @@ public class MainService {
         DetailsPairDto pairDto = DetailsPairDto.convertToDto(pair);
         return pairDto;
     }
+
+	public DetailsPairDto addPair(PairAddForm form, HttpServletRequest request) {
+        User user = userRepository.getOne(getUserId(request));
+        Pair pair = new Pair(form.getName(), user, (float)form.getRating());
+        LocalDate today = LocalDate.now();
+        FeedBack feedback = new FeedBack(form.getRating(), today);
+        feedback.addPairToPairList(pair);
+        feedbackRepository.save(feedback);
+        pair.getFeedbackList().add(feedback);
+        pairRepository.save(pair);
+        return DetailsPairDto.convertToDto(pair);
+	}
 
 	public DetailsPairDto addFeedBackToPair(PairRatingForm form, HttpServletRequest request) {
         Pair pair = secureFindPairById(form.getPairId(), request);
