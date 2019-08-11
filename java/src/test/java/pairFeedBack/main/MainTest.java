@@ -17,13 +17,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
 
-import net.bytebuddy.agent.VirtualMachine.ForHotSpot.Connection.Response;
 import pairFeedBack.dataTransferer.dto.DetailsPairDto;
-import pairFeedBack.dataTransferer.dto.ExceptionDto;
 import pairFeedBack.dataTransferer.dto.TokenDto;
 import pairFeedBack.dataTransferer.form.LoginForm;
 import pairFeedBack.dataTransferer.form.PairRatingForm;
@@ -83,6 +79,7 @@ public class MainTest {
     public void shouldPostNewFeedBackInPair(URI uri, HttpHeaders header) throws URISyntaxException {
         PairRatingForm form = new PairRatingForm();
         form.setPairId(1L);
+        form.setMessage("message");
         form.setRating(6);
         HttpEntity<PairRatingForm> requestEntity = new HttpEntity<>(form, header);
         ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.PATCH, requestEntity, DetailsPairDto.class);
@@ -93,6 +90,7 @@ public class MainTest {
     public void shouldNotPostNewFeedBackInPair(URI uri, HttpHeaders header) throws URISyntaxException {
         PairRatingForm form = new PairRatingForm();
         form.setPairId(5L);
+        form.setMessage("message");
         form.setRating(2);
         HttpEntity<PairRatingForm> requestEntity = new HttpEntity<>(form, header);
         ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.PATCH, requestEntity, DetailsPairDto.class);
@@ -102,6 +100,7 @@ public class MainTest {
     public void shouldEditPostFeedBackInPair(URI uri, HttpHeaders header) throws URISyntaxException {
         PairRatingForm form = new PairRatingForm();
         form.setPairId(1L);
+        form.setMessage("message");
         form.setRating(4);
         HttpEntity<PairRatingForm> requestEntity = new HttpEntity<>(form, header);
         ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.PATCH, requestEntity, DetailsPairDto.class);
