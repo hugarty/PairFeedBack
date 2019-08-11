@@ -4,6 +4,7 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class PairAddForm {
 
@@ -13,6 +14,11 @@ public class PairAddForm {
     @DecimalMax(value = "10", inclusive = true)
     @DecimalMin(value = "0", inclusive = true)
     Integer rating;
+
+
+    @NotNull @Size(max = 200)
+    String message;
+
 
     public String getName() {
         return name;
@@ -28,5 +34,13 @@ public class PairAddForm {
 
     public void setRating(Integer rating) {
         this.rating = rating;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

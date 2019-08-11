@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class FeedBack {
@@ -18,6 +20,9 @@ public class FeedBack {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     Integer rating;
+    
+    @NotNull @Size(max = 200)
+    String message;
 
     @Column(name = "date", columnDefinition = "DATE")
     LocalDate date;
@@ -28,8 +33,9 @@ public class FeedBack {
     public FeedBack (){
     }
 
-    public FeedBack (Integer rating, LocalDate today){
+    public FeedBack (Integer rating, String message, LocalDate today){
         this.rating = rating;
+        this.message = message;
         this.date = today;
     }
 
@@ -47,6 +53,14 @@ public class FeedBack {
 
     public void setRating(Integer rating) {
         this.rating = rating;
+    }
+    
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public List<Pair> getPairList() {

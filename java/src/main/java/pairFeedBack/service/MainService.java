@@ -52,7 +52,7 @@ public class MainService {
         User user = userRepository.getOne(getUserId(request));
         Pair pair = new Pair(form.getName(), user, (float)form.getRating());
         LocalDate today = LocalDate.now();
-        FeedBack feedback = new FeedBack(form.getRating(), today);
+        FeedBack feedback = new FeedBack(form.getRating(), form.getMessage(), today);
 
         feedback.addPairToPairList(pair);
         pair.getFeedbackList().add(feedback);
@@ -62,7 +62,7 @@ public class MainService {
         return DetailsPairDto.convertToDto(pair);
 	}
     
-	public DetailsPairDto addFeedBackToPair(PairRatingForm form, HttpServletRequest request) {
+	public DetailsPairDto addFeedbackToPair(PairRatingForm form, HttpServletRequest request) {
         Pair pair = secureFindPairById(form.getPairId(), request);
         LocalDate today = LocalDate.now();
         Optional<FeedBack> optFeedback = pair.getFeedbackList().stream()
@@ -74,7 +74,7 @@ public class MainService {
             feedbackRepository.save(optFeedback.get());
         }
         else{
-            FeedBack feedBack = new FeedBack(form.getRating(), today);
+            FeedBack feedBack = new FeedBack(form.getRating(), form.getMessage(), today);
             feedBack.addPairToPairList(pair);
             pair.getFeedbackList().add(feedBack);
             feedbackRepository.save(feedBack);
