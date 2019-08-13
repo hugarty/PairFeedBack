@@ -66,24 +66,58 @@ public class MainService {
         Pair pair = secureFindPairById(form.getPairId(), request);
         LocalDate today = LocalDate.now();
         Optional<FeedBack> optFeedback = pair.getFeedbackList().stream()
-        .filter(feedback -> feedback.getDate().isEqual(today))
-        .findFirst();
+            .filter(feedback -> feedback.getDate().isEqual(today))
+            .findFirst();
         
         if(optFeedback.isPresent()){
-            optFeedback.get().setRating(form.getRating());
-            feedbackRepository.save(optFeedback.get());
+            updateTodaysFeedBack(form, pair, optFeedback.get());
         }
         else{
-            FeedBack feedBack = new FeedBack(form.getRating(), form.getMessage(), today);
-            feedBack.addPairToPairList(pair);
-            pair.getFeedbackList().add(feedBack);
-            feedbackRepository.save(feedBack);
+            addNewFeedBackToPair(form, pair, today);
         }
         
         DetailsPairDto detailsPairDto = DetailsPairDto.convertToDto(pair);
 		return detailsPairDto;
     }
+
+    private void updateTodaysFeedBack(PairRatingForm form, Pair pair, FeedBack feedback) {
+        if(!feedback.getMessage().equals(form.getMessage())){
+            feedback.setMessage(form.getMessage());
+        }
+        if(feedback.getRating() != form.getRating()){
+            pair.setAverage(getNewPairAverageWithoutNewFeedback(feedback, pair, form.getRating()));
+            feedback.setRating(form.getRating());
+        }
+        feedbackRepository.save(feedback);
+    }
+
+    private void addNewFeedBackToPair(PairRatingForm form, Pair pair, LocalDate today) {
+        FeedBack feedBack = new FeedBack(form.getRating(), form.getMessage(), today);
+        pair.setAverage(getNewPairAverage(pair, feedBack.getRating()));
+        feedBack.getPairList().add(pair);
+        pair.getFeedbackList().add(feedBack);
+        feedbackRepository.save(feedBack);
+        pairRepository.save(pair);
+    }
     
+    private float getNewPairAverageWithoutNewFeedback(FeedBack feedBack, Pair pair, Integer newRating) {
+        int listValuesSum = (int) getSumOfAveragesInFeedbackList(pair);
+        int listValuesSumMinusLastFeedback = listValuesSum - feedBack.getRating();
+        int newListValuesSum = listValuesSumMinusLastFeedback + newRating;
+        float newAverage = newListValuesSum / pair.getFeedbackList().size();
+        return newAverage;
+    }
+
+    private float getNewPairAverage(Pair pair, Integer feedbackValue) {
+        int listValuesSum = (int) getSumOfAveragesInFeedbackList(pair);
+        float newAverage = (listValuesSum + feedbackValue) / (pair.getFeedbackList().size() + 1);
+        return newAverage;
+    }
+
+    private float getSumOfAveragesInFeedbackList(Pair pair) {
+        return pair.getFeedbackList().size() * pair.getAverage();
+    }
+
     public DetailsPairDto updatePair(@Valid PairUpdateForm form, HttpServletRequest request) {
         Pair pair = secureFindPairById(form.getPairId(), request);
         pair.setName(form.getName());
