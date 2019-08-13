@@ -54,7 +54,7 @@ public class MainService {
         LocalDate today = LocalDate.now();
         FeedBack feedback = new FeedBack(form.getRating(), form.getMessage(), today);
 
-        feedback.addPairToPairList(pair);
+        feedback.getPairList().add(pair);
         pair.getFeedbackList().add(feedback);
         
         feedbackRepository.save(feedback);
@@ -97,7 +97,6 @@ public class MainService {
         feedBack.getPairList().add(pair);
         pair.getFeedbackList().add(feedBack);
         feedbackRepository.save(feedBack);
-        pairRepository.save(pair);
     }
     
     private float getNewPairAverageWithoutNewFeedback(FeedBack feedBack, Pair pair, Integer newRating) {

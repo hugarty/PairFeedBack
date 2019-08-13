@@ -67,14 +67,6 @@ public class FeedBack {
         return pairList;
     }
 
-    public void setPairList(List<Pair> pairList) {
-        this.pairList = pairList;
-    }
-
-    public void  addPairToPairList (Pair pair){
-        this.pairList.add(pair);
-    }
-
     public LocalDate getDate() {
         return date;
     }
