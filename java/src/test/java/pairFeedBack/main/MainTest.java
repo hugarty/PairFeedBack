@@ -71,7 +71,7 @@ public class MainTest {
 
 
     @Test
-    public void doPostFeedbackInPairTests () throws URISyntaxException {
+    public void doTestInUserOne () throws URISyntaxException {
         URI uri = Utils.getUriForPath("/me/pair", port);
         HttpHeaders header = doLoginAndReturnAuthorizationHeader();
         shouldPostNewFeedBackInPair(uri, header);
@@ -79,6 +79,7 @@ public class MainTest {
         shouldEditPostFeedBackInPair(uri, header);
         shouldCreateNewPair(uri, header);
         shouldDeleteLastPair(header);
+        shouldNotDeleteLastPair(header);
     }
 
     
@@ -133,6 +134,15 @@ public class MainTest {
         HttpEntity<PairAddForm> requestEntity = new HttpEntity<>(form, header);
         ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.DELETE, requestEntity, DetailsPairDto.class);
         assertThat(result.getStatusCodeValue()).isEqualTo(200);
+        ID_USUARIO_CRIADO--;
+    }
+
+    private void shouldNotDeleteLastPair(HttpHeaders header) throws URISyntaxException {
+        URI uri = Utils.getUriForPath("/me/pair/"+ID_USUARIO_CRIADO, port);
+        PairAddForm form = new PairAddForm();
+        HttpEntity<PairAddForm> requestEntity = new HttpEntity<>(form, header);
+        ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.DELETE, requestEntity, DetailsPairDto.class);
+        assertThat(result.getStatusCodeValue()).isEqualTo(403);
     }
     
     private HttpHeaders doLoginAndReturnAuthorizationHeader() throws URISyntaxException {
