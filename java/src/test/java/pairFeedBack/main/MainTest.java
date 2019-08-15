@@ -22,6 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import pairFeedBack.dataTransferer.dto.DetailsPairDto;
 import pairFeedBack.dataTransferer.dto.TokenDto;
 import pairFeedBack.dataTransferer.form.LoginForm;
+import pairFeedBack.dataTransferer.form.PairAddForm;
 import pairFeedBack.dataTransferer.form.PairRatingForm;
 import pairFeedBack.utils.Utils;
 
@@ -74,8 +75,10 @@ public class MainTest {
         shouldPostNewFeedBackInPair(uri, header);
         shouldNotPostNewFeedBackInPair(uri, header);
         shouldEditPostFeedBackInPair(uri, header);
+        shouldCreateNewPair(uri, header);
     }
 
+    
     public void shouldPostNewFeedBackInPair(URI uri, HttpHeaders header) throws URISyntaxException {
         PairRatingForm form = new PairRatingForm();
         form.setPairId(1L);
@@ -86,7 +89,7 @@ public class MainTest {
         assertThat(result.getStatusCodeValue()).isEqualTo(201);
         assertThat(result.getBody().getFeedBackDtoList().size()).isEqualTo(2);
     }
-
+    
     public void shouldNotPostNewFeedBackInPair(URI uri, HttpHeaders header) throws URISyntaxException {
         PairRatingForm form = new PairRatingForm();
         form.setPairId(5L);
@@ -96,7 +99,7 @@ public class MainTest {
         ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.PATCH, requestEntity, DetailsPairDto.class);
         assertThat(result.getStatusCodeValue()).isEqualTo(403);
     }
-
+    
     public void shouldEditPostFeedBackInPair(URI uri, HttpHeaders header) throws URISyntaxException {
         PairRatingForm form = new PairRatingForm();
         form.setPairId(1L);
@@ -107,13 +110,25 @@ public class MainTest {
         assertThat(result.getStatusCodeValue()).isEqualTo(201);
         assertThat(result.getBody().getFeedBackDtoList().get(1).getAverage()).isEqualTo(4);
     }
-
+    
+    private void shouldCreateNewPair(URI uri, HttpHeaders header) {
+        PairAddForm form = new PairAddForm();
+        String name = "Wenderson";
+        form.setName(name);
+        form.setMessage("message");
+        form.setRating(5);
+        HttpEntity<PairAddForm> requestEntity = new HttpEntity<>(form, header);
+        ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.POST, requestEntity, DetailsPairDto.class);
+        assertThat(result.getStatusCodeValue()).isEqualTo(201);
+        assertThat(result.getBody().getName()).isEqualToIgnoringCase(name);
+    }
+    
     private HttpHeaders doLoginAndReturnAuthorizationHeader() throws URISyntaxException {
         TokenDto tokenDto = doLoginReturnTokenDto();
         HttpHeaders headers = Utils.getHeaderWithAuthorization(tokenDto);
         return headers;
     }
-
+    
     private TokenDto doLoginReturnTokenDto() throws URISyntaxException {
         URI uri = Utils.getUriForPath("/auth", port);
         LoginForm loginForm = new LoginForm();
