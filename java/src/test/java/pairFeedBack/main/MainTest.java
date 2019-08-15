@@ -42,6 +42,8 @@ public class MainTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    private Long ID_USUARIO_CRIADO;
+
     @Test
     public void shouldAccessContentMe() throws URISyntaxException {
         URI uri = Utils.getUriForPath("/me", port);
@@ -76,6 +78,7 @@ public class MainTest {
         shouldNotPostNewFeedBackInPair(uri, header);
         shouldEditPostFeedBackInPair(uri, header);
         shouldCreateNewPair(uri, header);
+        shouldDeleteLastPair(header);
     }
 
     
@@ -121,6 +124,15 @@ public class MainTest {
         ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.POST, requestEntity, DetailsPairDto.class);
         assertThat(result.getStatusCodeValue()).isEqualTo(201);
         assertThat(result.getBody().getName()).isEqualToIgnoringCase(name);
+        ID_USUARIO_CRIADO = result.getBody().getId();
+    }
+
+    private void shouldDeleteLastPair( HttpHeaders header) throws URISyntaxException {
+        URI uri = Utils.getUriForPath("/me/pair/"+ID_USUARIO_CRIADO, port);
+        PairAddForm form = new PairAddForm();
+        HttpEntity<PairAddForm> requestEntity = new HttpEntity<>(form, header);
+        ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.DELETE, requestEntity, DetailsPairDto.class);
+        assertThat(result.getStatusCodeValue()).isEqualTo(200);
     }
     
     private HttpHeaders doLoginAndReturnAuthorizationHeader() throws URISyntaxException {
