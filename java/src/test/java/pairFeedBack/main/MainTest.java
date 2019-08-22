@@ -112,7 +112,7 @@ public class MainTest {
         HttpEntity<PairRatingForm> requestEntity = new HttpEntity<>(form, header);
         ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.PATCH, requestEntity, DetailsPairDto.class);
         assertThat(result.getStatusCodeValue()).isEqualTo(201);
-        assertThat(result.getBody().getFeedBackDtoList().get(1).getAverage()).isEqualTo(4);
+        assertThat(result.getBody().getFeedBackDtoList().get(1).getRating()).isEqualTo(4);
     }
     
     private void shouldCreateNewPair(URI uri, HttpHeaders header) {

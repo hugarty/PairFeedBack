@@ -7,12 +7,12 @@ import pairFeedBack.entity.FeedBack;
 public class FeedBackDto {
 
     Long id;
-    Integer average;
+    Integer rating;
     LocalDate date;
 
-    public FeedBackDto(Long id, Integer average, LocalDate date) {
+    public FeedBackDto(Long id, Integer rating, LocalDate date) {
         this.id = id;
-        this.average = average;
+        this.rating = rating;
         this.date = date;
     }
 
@@ -24,12 +24,12 @@ public class FeedBackDto {
         this.id = id;
     }
 
-    public Integer getAverage() {
-        return average;
+    public Integer getRating() {
+        return rating;
     }
 
-    public void setAverage(Integer average) {
-        this.average = average;
+    public void setRating(Integer rating) {
+        this.rating = rating;
     }
 
     public LocalDate getDate() {
