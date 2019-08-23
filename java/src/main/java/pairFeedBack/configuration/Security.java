@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import pairFeedBack.configuration.filter.AuthenticationFilter;
 import pairFeedBack.repository.UserRepository;
 import pairFeedBack.service.TokenService;
-import pairFeedBack.service.UserAuthenticationService;
+import pairFeedBack.service.UserAuthDetailsService;;
 
 
 @Configuration
@@ -24,7 +24,7 @@ import pairFeedBack.service.UserAuthenticationService;
 public class Security extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    UserAuthenticationService userAuthService;
+    UserAuthDetailsService userAuthService;
 
     @Autowired
     UserRepository userRepository;

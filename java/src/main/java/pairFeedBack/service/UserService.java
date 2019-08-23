@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import pairFeedBack.dataTransferer.dto.TokenDto;
 import pairFeedBack.dataTransferer.dto.UserDto;
 import pairFeedBack.dataTransferer.form.SignUpForm;
 import pairFeedBack.entity.User;
@@ -25,6 +26,8 @@ public class UserService {
     @Autowired
     PerfilRepository perfilRepository;
 
+    @Autowired
+    UserAuthService userAuthService;
 
     public UserDto findUserDto (Long id){
         Optional<User> optUser = userRepository.findById(id);
@@ -43,12 +46,12 @@ public class UserService {
     }
 
     @Transactional
-	public UserDto saveNewUser(SignUpForm form) {
+	public TokenDto saveNewUser(SignUpForm form) {
         String senha = new BCryptPasswordEncoder().encode(form.getSenha());
         User user = new User(form.getName(), form.getEmail(), senha);
         user.addPerfil(perfilRepository.findByPerfilEnum(PerfilEnum.USER));
         userRepository.save(user);
-        UserDto userDto = UserDto.convertToDto(user);
-        return userDto;
+        TokenDto tokenDto = userAuthService.authenticateUserAndReturnToken(user, form.getSenha());
+        return tokenDto;
 	}
 }

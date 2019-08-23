@@ -1,6 +1,5 @@
 package pairFeedBack.controller;
 
-import java.net.URI;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -13,8 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
+import pairFeedBack.dataTransferer.dto.TokenDto;
 import pairFeedBack.dataTransferer.dto.UserDto;
 import pairFeedBack.dataTransferer.form.SignUpForm;
 import pairFeedBack.service.UserService;
@@ -38,10 +37,8 @@ public class UserController {
     }
     
     @PostMapping("/signup")
-    public ResponseEntity<UserDto> signUp (@RequestBody @Valid SignUpForm form) {
-        UserDto userDto = userService.saveNewUser(form);
-        URI uri = UriComponentsBuilder.newInstance()
-                .path("/user/{id}").buildAndExpand(userDto.getId()).toUri();
-        return ResponseEntity.created(uri).body(userDto);
+    public ResponseEntity<TokenDto> signUp (@RequestBody @Valid SignUpForm form) {
+        TokenDto tokenDto = userService.saveNewUser(form);
+        return ResponseEntity.ok(tokenDto);
     }
 }

@@ -12,7 +12,7 @@ import pairFeedBack.entity.User;
 import pairFeedBack.repository.UserRepository;
 
 @Service
-public class UserAuthenticationService implements UserDetailsService {
+public class UserAuthDetailsService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
@@ -24,5 +24,5 @@ public class UserAuthenticationService implements UserDetailsService {
             return optUser.get();
 
         throw new UsernameNotFoundException("Usuário não encontrado!");
-	}
+    }
 }
