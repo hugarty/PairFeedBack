@@ -45,10 +45,10 @@ public class UserTest {
         signUpForm.setSenha(senha);
 
         HttpEntity<SignUpForm> requestEntity = new HttpEntity<>(signUpForm);
-        ResponseEntity<UserDto> result = this.restTemplate.postForEntity(uri, requestEntity, UserDto.class);
+        ResponseEntity<TokenDto> result = this.restTemplate.postForEntity(uri, requestEntity, TokenDto.class);
         
-        assertThat(result.getStatusCodeValue()).isEqualTo(201);
-        assertThat(result.getBody().getName().equals(signUpForm.getName()));
+        assertThat(result.getStatusCodeValue()).isEqualTo(200);
+        assertThat(result.getBody().getToken().length()).isGreaterThan(5);
     }
 
     @Test
