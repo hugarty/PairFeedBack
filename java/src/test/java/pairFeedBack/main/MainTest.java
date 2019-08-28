@@ -155,7 +155,7 @@ public class MainTest {
         URI uri = Utils.getUriForPath("/auth", port);
         LoginForm loginForm = new LoginForm();
         loginForm.setEmail(userEmail);
-        loginForm.setSenha(userPasswd);
+        loginForm.setPasswd(userPasswd);
 
         HttpEntity<LoginForm> request = new HttpEntity<>(loginForm);
         ResponseEntity<TokenDto> result = this.restTemplate.postForEntity(uri, request, TokenDto.class);

@@ -13,7 +13,7 @@ public class SignUpForm {
     @NotNull @Email @Length(min = 3, max = 100)
     String email;
     @NotNull @NotEmpty @Length(min = 6, max = 100)
-    String senha;
+    String passwd;
 
     public String getName() {
         return name;
@@ -31,11 +31,11 @@ public class SignUpForm {
         this.email = email;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getPasswd() {
+        return passwd;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setPasswd(String passwd) {
+        this.passwd = passwd;
     }
 }

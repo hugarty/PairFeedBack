@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import pairFeedBack.dataTransferer.dto.TokenDto;
-import pairFeedBack.dataTransferer.dto.UserDto;
 import pairFeedBack.dataTransferer.form.LoginForm;
 import pairFeedBack.dataTransferer.form.SignUpForm;
 import pairFeedBack.utils.Utils;
@@ -33,7 +32,7 @@ public class UserTest {
     private TestRestTemplate restTemplate;
 
     private String email = "jose@jose.com";
-    private String senha = "senhateste";
+    private String passwd = "passwdteste";
     
     @Test 
     public void shouldSignUp () throws URISyntaxException{
@@ -42,7 +41,7 @@ public class UserTest {
         SignUpForm signUpForm = new SignUpForm();
         signUpForm.setEmail(email);
         signUpForm.setName("ArrobaRotemaio");
-        signUpForm.setSenha(senha);
+        signUpForm.setPasswd(passwd);
 
         HttpEntity<SignUpForm> requestEntity = new HttpEntity<>(signUpForm);
         ResponseEntity<TokenDto> result = this.restTemplate.postForEntity(uri, requestEntity, TokenDto.class);
@@ -56,7 +55,7 @@ public class UserTest {
         URI uri = Utils.getUriForPath("/auth", port);
         LoginForm loginForm = new LoginForm();
         loginForm.setEmail(email);
-        loginForm.setSenha(senha);
+        loginForm.setPasswd(passwd);
 
         HttpEntity<LoginForm> request = new HttpEntity<>(loginForm);
         ResponseEntity<TokenDto> result = this.restTemplate.postForEntity(uri, request, TokenDto.class);

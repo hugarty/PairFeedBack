@@ -13,7 +13,7 @@ public class AuthHandler {
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ExceptionDto authenticationExceptionHandler(AuthenticationException e) {
-        ExceptionDto dto = new ExceptionDto("Login ou senha incorretos", e.getLocalizedMessage());
+        ExceptionDto dto = new ExceptionDto("Incorrect email or password", e.getLocalizedMessage());
         return dto;
     }
 }

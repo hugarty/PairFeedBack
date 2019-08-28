@@ -49,7 +49,7 @@ public class AuthTest {
         URI uri = Utils.getUriForPath("/auth", port);
         LoginForm loginForm = new LoginForm();
         loginForm.setEmail(userEmail);
-        loginForm.setSenha(userPasswd + "abc");
+        loginForm.setPasswd(userPasswd + "abc");
 
         HttpEntity<LoginForm> request = new HttpEntity<>(loginForm);
         ResponseEntity<String> result = this.restTemplate.postForEntity(uri, request, String.class);
@@ -61,7 +61,7 @@ public class AuthTest {
         URI uri = Utils.getUriForPath("/auth", port);
         LoginForm loginForm = new LoginForm();
         loginForm.setEmail(userEmail);
-        loginForm.setSenha(userPasswd);
+        loginForm.setPasswd(userPasswd);
 
         HttpEntity<LoginForm> request = new HttpEntity<>(loginForm);
         ResponseEntity<TokenDto> result = this.restTemplate.postForEntity(uri, request, TokenDto.class);

@@ -18,8 +18,8 @@ public class UserAuthService {
     @Autowired
     TokenService tokenService;
     
-    public TokenDto authenticateUserAndReturnToken(User user, String senha){                
-        var userAuth = new UsernamePasswordAuthenticationToken(user.getEmail(), senha);
+    public TokenDto authenticateUserAndReturnToken(User user, String passwd){                
+        var userAuth = new UsernamePasswordAuthenticationToken(user.getEmail(), passwd);
         Authentication auth = authManager.authenticate(userAuth);
         String token = tokenService.geraToken(auth);
         return new TokenDto(token, "Bearer");

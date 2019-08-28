@@ -13,10 +13,10 @@ public class LoginForm {
     String email;
     
     @NotNull @NotEmpty @Length(min = 6, max = 100)
-    String senha;
+    String passwd;
         
     public UsernamePasswordAuthenticationToken convert(){
-       return new UsernamePasswordAuthenticationToken(email, senha);
+       return new UsernamePasswordAuthenticationToken(email, passwd);
     }
 
     public String getEmail() {
@@ -27,11 +27,11 @@ public class LoginForm {
         this.email = email;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getPasswd() {
+        return passwd;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setPasswd(String passwd) {
+        this.passwd = passwd;
     }
 }

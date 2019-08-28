@@ -28,7 +28,7 @@ public class User implements UserDetails {
 
     @Column(unique = true)
     String email;
-    String senha;
+    String passwd;
 
     @OneToMany(mappedBy = "user")
     List<Pair> pairs = new ArrayList<>();
@@ -39,10 +39,10 @@ public class User implements UserDetails {
     public User(){
     }
 
-	public User(String name, String email, String senha) {
+	public User(String name, String email, String passwd) {
         this.name = name;
         this.email = email;
-        this.senha = senha;
+        this.passwd = passwd;
 	}
 
 	public Long getId() {
@@ -69,12 +69,12 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getPasswd() {
+        return passwd;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setPasswd(String passwd) {
+        this.passwd = passwd;
     }
 
     public List<Pair> getPairs() {
@@ -92,7 +92,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return senha;
+        return passwd;
     }
 
     @Override

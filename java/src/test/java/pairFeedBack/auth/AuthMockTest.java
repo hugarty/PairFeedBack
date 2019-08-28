@@ -46,7 +46,7 @@ public class AuthMockTest {
     public void trySignInShouldWork() throws Exception {
         LoginForm loginForm = new LoginForm();
         loginForm.setEmail(userEmail);
-        loginForm.setSenha(userPasswd);
+        loginForm.setPasswd(userPasswd);
         mockMvc.perform(MockMvcRequestBuilders.post("/auth").content(asJson(loginForm))
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.tipo").value("Bearer"));

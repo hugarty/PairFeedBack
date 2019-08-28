@@ -18,7 +18,7 @@ public class TokenService {
     @Value("${api.jwt.token.expiration}")
     String expirationValue;
 
-    @Value("${api.jwt.token.senha.aleatoria}")
+    @Value("${api.jwt.token.passwd.aleatoria}")
     String randomPasswd;
 
     @Value("${api.jwt.token.nome.api}")

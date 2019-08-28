@@ -47,11 +47,11 @@ public class UserService {
 
     @Transactional
 	public TokenDto saveNewUser(SignUpForm form) {
-        String senha = new BCryptPasswordEncoder().encode(form.getSenha());
-        User user = new User(form.getName(), form.getEmail(), senha);
+        String passwd = new BCryptPasswordEncoder().encode(form.getPasswd());
+        User user = new User(form.getName(), form.getEmail(), passwd);
         user.addPerfil(perfilRepository.findByPerfilEnum(PerfilEnum.USER));
         userRepository.save(user);
-        TokenDto tokenDto = userAuthService.authenticateUserAndReturnToken(user, form.getSenha());
+        TokenDto tokenDto = userAuthService.authenticateUserAndReturnToken(user, form.getPasswd());
         return tokenDto;
 	}
 }
