@@ -85,36 +85,24 @@ public class MainService {
             feedback.setMessage(form.getMessage());
         }
         if(feedback.getRating() != form.getRating()){
-            pair.setAverage(getNewPairAverageWithoutNewFeedback(feedback, pair, form.getRating()));
             feedback.setRating(form.getRating());
+            pair.setAverage(getNewPairAverage(pair));
         }
         feedbackRepository.save(feedback);
     }
 
     private void addNewFeedBackToPair(PairRatingForm form, Pair pair, LocalDate today) {
         FeedBack feedBack = new FeedBack(form.getRating(), form.getMessage(), today);
-        pair.setAverage(getNewPairAverage(pair, feedBack.getRating()));
         feedBack.getPairList().add(pair);
         pair.getFeedbackList().add(feedBack);
+        pair.setAverage(getNewPairAverage(pair));
         feedbackRepository.save(feedBack);
     }
     
-    private float getNewPairAverageWithoutNewFeedback(FeedBack feedBack, Pair pair, Integer newRating) {
-        int listValuesSum = (int) getSumOfAveragesInFeedbackList(pair);
-        int listValuesSumMinusLastFeedback = listValuesSum - feedBack.getRating();
-        int newListValuesSum = listValuesSumMinusLastFeedback + newRating;
-        float newAverage = newListValuesSum / pair.getFeedbackList().size();
+    private float getNewPairAverage(Pair pair) {
+        int sumOfFeedbacks = pair.getFeedbackList().stream().mapToInt(item -> item.getRating()).sum();
+        float newAverage = (float) sumOfFeedbacks / pair.getFeedbackList().size();
         return newAverage;
-    }
-
-    private float getNewPairAverage(Pair pair, Integer feedbackValue) {
-        int listValuesSum = (int) getSumOfAveragesInFeedbackList(pair);
-        float newAverage = (listValuesSum + feedbackValue) / (pair.getFeedbackList().size() + 1);
-        return newAverage;
-    }
-
-    private float getSumOfAveragesInFeedbackList(Pair pair) {
-        return pair.getFeedbackList().size() * pair.getAverage();
     }
 
     public DetailsPairDto updatePair(@Valid PairUpdateForm form, HttpServletRequest request) {
