@@ -25,9 +25,10 @@ public class UserService {
     UserRepository userRepository;
     @Autowired
     PerfilRepository perfilRepository;
-
     @Autowired
     UserAuthService userAuthService;
+    @Autowired
+    MainService mainService;
 
     public UserDto findUserDto (Long id){
         Optional<User> optUser = userRepository.findById(id);
@@ -51,6 +52,7 @@ public class UserService {
         User user = new User(form.getName(), form.getEmail(), passwd);
         user.addPerfil(perfilRepository.findByPerfilEnum(PerfilEnum.USER));
         userRepository.save(user);
+        mainService.addExamplesPairs(user);
         TokenDto tokenDto = userAuthService.authenticateUserAndReturnToken(user, form.getPasswd());
         return tokenDto;
 	}

@@ -131,4 +131,33 @@ public class MainService {
         }
         throw new EmptyResultDataAccessException("Pair não encontrado", 1);
     }
+
+    public void addExamplesPairs(User user){
+        Pair pairExample1 = pairRepository.getOne(1l);
+        Pair pairExample2 = pairRepository.getOne(2l);
+        copyPairExampleToUser(pairExample1, user);
+        copyPairExampleToUser(pairExample2, user);
+        
+    }
+
+    private void copyPairExampleToUser(Pair source, User user){
+        Pair pairTarget = new Pair();
+        pairTarget.setAverage(source.getAverage());
+        pairTarget.setName(source.getName());
+        pairTarget.setUser(user);
+        for (FeedBack fb : source.getFeedbackList()){
+            copyFeedBackToPair(pairTarget, fb);
+        }
+        pairRepository.save(pairTarget);
+    }
+
+    private void copyFeedBackToPair(Pair pair, FeedBack fb) {
+        FeedBack fbCopy = new FeedBack();
+        fbCopy.setDate(fb.getDate());
+        fbCopy.setMessage(fb.getMessage());
+        fbCopy.setRating(fb.getRating());
+        fbCopy.getPairList().add(pair);
+        pair.getFeedbackList().add(fbCopy);
+        feedbackRepository.save(fbCopy);
+    }
 }
