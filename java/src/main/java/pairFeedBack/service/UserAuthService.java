@@ -19,7 +19,7 @@ public class UserAuthService {
     TokenService tokenService;
     
     public TokenDto authenticateUserAndReturnToken(User user, String passwd){                
-        var userAuth = new UsernamePasswordAuthenticationToken(user.getEmail(), passwd);
+        UsernamePasswordAuthenticationToken userAuth = new UsernamePasswordAuthenticationToken(user.getEmail(), passwd);
         Authentication auth = authManager.authenticate(userAuth);
         String token = tokenService.geraToken(auth);
         return new TokenDto(token, "Bearer");

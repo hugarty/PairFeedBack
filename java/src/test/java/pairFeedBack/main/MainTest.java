@@ -54,8 +54,8 @@ public class MainTest {
 
         assertThat(result.getStatusCodeValue()).isEqualTo(200);
         assertThat(result.getBody()).contains("Cleitor");
-        assertThat(result.getBody()).contains("Par");
-        assertThat(result.getBody()).contains("Par3");
+        assertThat(result.getBody()).contains("Nanna");
+        assertThat(result.getBody()).contains("Muay thai class");
     }
 
     @Test
@@ -91,7 +91,7 @@ public class MainTest {
         HttpEntity<PairRatingForm> requestEntity = new HttpEntity<>(form, header);
         ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.PATCH, requestEntity, DetailsPairDto.class);
         assertThat(result.getStatusCodeValue()).isEqualTo(201);
-        assertThat(result.getBody().getFeedBackDtoList().size()).isEqualTo(2);
+        assertThat(result.getBody().getFeedBackDtoList().size()).isEqualTo(4);
     }
     
     public void shouldNotPostNewFeedBackInPair(URI uri, HttpHeaders header) throws URISyntaxException {
@@ -101,7 +101,7 @@ public class MainTest {
         form.setRating(2);
         HttpEntity<PairRatingForm> requestEntity = new HttpEntity<>(form, header);
         ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.PATCH, requestEntity, DetailsPairDto.class);
-        assertThat(result.getStatusCodeValue()).isEqualTo(403);
+        assertThat(result.getStatusCodeValue()).isEqualTo(404);
     }
     
     public void shouldEditPostFeedBackInPair(URI uri, HttpHeaders header) throws URISyntaxException {
@@ -112,7 +112,7 @@ public class MainTest {
         HttpEntity<PairRatingForm> requestEntity = new HttpEntity<>(form, header);
         ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.PATCH, requestEntity, DetailsPairDto.class);
         assertThat(result.getStatusCodeValue()).isEqualTo(201);
-        assertThat(result.getBody().getFeedBackDtoList().get(1).getRating()).isEqualTo(4);
+        assertThat(result.getBody().getFeedBackDtoList().get(1).getRating()).isEqualTo(10);
     }
     
     private void shouldCreateNewPair(URI uri, HttpHeaders header) {
@@ -133,7 +133,7 @@ public class MainTest {
         PairAddForm form = new PairAddForm();
         HttpEntity<PairAddForm> requestEntity = new HttpEntity<>(form, header);
         ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.DELETE, requestEntity, DetailsPairDto.class);
-        assertThat(result.getStatusCodeValue()).isEqualTo(200);
+        assertThat(result.getStatusCodeValue()).isEqualTo(404);
         ID_USUARIO_CRIADO--;
     }
 
@@ -142,7 +142,7 @@ public class MainTest {
         PairAddForm form = new PairAddForm();
         HttpEntity<PairAddForm> requestEntity = new HttpEntity<>(form, header);
         ResponseEntity<DetailsPairDto> result = this.restTemplate.exchange(uri, HttpMethod.DELETE, requestEntity, DetailsPairDto.class);
-        assertThat(result.getStatusCodeValue()).isEqualTo(403);
+        assertThat(result.getStatusCodeValue()).isEqualTo(404);
     }
     
     private HttpHeaders doLoginAndReturnAuthorizationHeader() throws URISyntaxException {

@@ -29,21 +29,21 @@ public class GenericHandler {
     @ExceptionHandler(DeniedDataAccessException.class)
     @ResponseStatus(code = HttpStatus.FORBIDDEN)
     public ExceptionDto deniedDataAccessExceptionHandler (DeniedDataAccessException e){
-        var dto =  new ExceptionDto(e.getMessage());
+        ExceptionDto dto =  new ExceptionDto(e.getMessage());
         return dto;
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ExceptionDto emptyResultDataAccessExceptionHandler (EmptyResultDataAccessException e){
-        var dto =  new ExceptionDto(e.getMessage());
+        ExceptionDto dto =  new ExceptionDto(e.getMessage());
         return dto;
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ExceptionDto emptyResultDataAccessExceptionHandler (ConstraintViolationException e){
-        var dto =  new ExceptionDto("Email já está sendo usado");
+        ExceptionDto dto =  new ExceptionDto("Email já está sendo usado");
         return dto;
     }
 }
